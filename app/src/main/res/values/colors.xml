@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1a5fad</color>
+    <color name="colorPrimaryDark">#161622</color>
+    <color name="colorAccent">#ad971a</color>
+    <color name="background">#161622</color>
+    <color name="foreground">#efefef</color>
+    <color name="foregroundDark">#898989</color>
+    <color name="elementBackground">#12121c</color>s
+    <color name="niceRed">#ad371a</color>
+    <color name="niceGreen">#37ad1a</color>
+    <color name="niceYellow">#ad971a</color>
+    <color name="niceBlue">#1a5fad</color>
+    <color name="niceOrange">#ad681a</color>
+    <color name="niceWhite">#bfc4ca</color>
+    <color name="niceBlack">#121213</color>
+    <color name="niceGray">#616870</color>
+    <color name="niceBrown">#503312</color>
+    <color name="niceOcean">#1aa8ad</color>
+    <color name="nicePurple">#941aad</color>
+    <color name="nicePink">#ad1a6b</color>
+</resources>
