@@ -9,42 +9,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.danielsharp01.taskstopwatch.MainActivity;
 import com.danielsharp01.taskstopwatch.R;
-import com.danielsharp01.taskstopwatch.model.Tag;
+import com.danielsharp01.taskstopwatch.Tickable;
 import com.danielsharp01.taskstopwatch.model.TagTime;
 
-import org.threeten.bp.Duration;
-
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class TagTimeAdapter extends RecyclerView.Adapter<TagTimeAdapter.TagTimeViewHolder>
 {
     private ArrayList<TagTime> data = new ArrayList<>();
     private Context context;
 
-    public TagTimeAdapter(Context context)
+    public TagTimeAdapter(Context context, Collection<TagTime> data)
     {
-        this.data.add(new TagTime(new Tag("Job", "red"), Duration.ofHours(2)));
-        this.data.add(new TagTime(new Tag("School", "blue"), Duration.ofHours(2)));
-        this.data.add(new TagTime(new Tag("Project", "green"), Duration.ofHours(2)));
-        this.data.add(new TagTime(new Tag("Gaming", "yellow"), Duration.ofHours(2)));
-        this.data.add(new TagTime(new Tag("Job", "red"), Duration.ofHours(2)));
-        this.data.add(new TagTime(new Tag("School", "blue"), Duration.ofHours(2)));
-        this.data.add(new TagTime(new Tag("Project", "green"), Duration.ofHours(2)));
-        this.data.add(new TagTime(new Tag("Gaming", "yellow"), Duration.ofHours(2)));
-        this.data.add(new TagTime(new Tag("Job", "red"), Duration.ofHours(2)));
-        this.data.add(new TagTime(new Tag("School", "blue"), Duration.ofHours(2)));
-        this.data.add(new TagTime(new Tag("Project", "green"), Duration.ofHours(2)));
-        this.data.add(new TagTime(new Tag("Gaming", "yellow"), Duration.ofHours(2)));
-        this.data.add(new TagTime(new Tag("Job", "red"), Duration.ofHours(2)));
-        this.data.add(new TagTime(new Tag("School", "blue"), Duration.ofHours(2)));
-        this.data.add(new TagTime(new Tag("Project", "green"), Duration.ofHours(2)));
-        this.data.add(new TagTime(new Tag("Gaming", "yellow"), Duration.ofHours(2)));
-        this.data.add(new TagTime(new Tag("Job", "red"), Duration.ofHours(2)));
-        this.data.add(new TagTime(new Tag("School", "blue"), Duration.ofHours(2)));
-        this.data.add(new TagTime(new Tag("Project", "green"), Duration.ofHours(2)));
-        this.data.add(new TagTime(new Tag("Gaming", "yellow"), Duration.ofHours(2)));
         this.context = context;
+        this.data.addAll(data);
     }
 
     @NonNull
@@ -68,7 +49,7 @@ public class TagTimeAdapter extends RecyclerView.Adapter<TagTimeAdapter.TagTimeV
         return data.size();
     }
 
-    public class TagTimeViewHolder extends RecyclerView.ViewHolder
+    public class TagTimeViewHolder extends RecyclerView.ViewHolder implements Tickable
     {
         private TextView tvTag;
         private TextView tvDuration;
@@ -80,6 +61,7 @@ public class TagTimeAdapter extends RecyclerView.Adapter<TagTimeAdapter.TagTimeV
             super(itemView);
             tvTag = itemView.findViewById(R.id.tvTag);
             tvDuration = itemView.findViewById(R.id.tvDuration);
+            MainActivity.getInstance().subscribeTickable(this);
         }
 
         public void bind(TagTime tagTime)
@@ -89,6 +71,11 @@ public class TagTimeAdapter extends RecyclerView.Adapter<TagTimeAdapter.TagTimeV
             tvTag.setBackgroundColor(tagTime.getTag().getColorResource(context.getResources()));
             tvDuration.setText(tagTime.getDurationString());
 
+        }
+
+        @Override
+        public void tick() {
+            tvDuration.setText(tagTime.getDurationString());
         }
     }
 }

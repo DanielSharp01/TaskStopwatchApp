@@ -1,29 +1,38 @@
 package com.danielsharp01.taskstopwatch.model;
 
+import com.danielsharp01.taskstopwatch.MainActivity;
 import com.danielsharp01.taskstopwatch.TimeUtils;
+import com.danielsharp01.taskstopwatch.api.TaskStopwatchService;
 
 import org.threeten.bp.Duration;
-import org.threeten.bp.LocalTime;
+import org.threeten.bp.LocalDateTime;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class Task {
+    private String id;
     private String name;
-    private LocalTime start;
-    private LocalTime end;
-    private ArrayList<Tag> tags = new ArrayList<>();
+    private LocalDateTime start;
+    private LocalDateTime stop;
+    private ArrayList<String> tags = new ArrayList<>();
+    private boolean disabled;
 
-    public Task(String name, LocalTime start, LocalTime end, Tag[] tags)
+    public Task(String id, String name, LocalDateTime start, LocalDateTime end, String[] tags)
     {
+        this.id = id;
         this.name = name;
         this.start = start;
-        this.end = end;
+        this.stop = end;
         Collections.addAll(this.tags, tags);
     }
 
+    public String getId() {
+        return id;
+    }
+
     public Duration getDuration() {
-        return Duration.between(start, end == null ? LocalTime.now() : end);
+        return Duration.between(start, stop == null ? LocalDateTime.now() : stop);
     }
 
     public String getDurationString()
@@ -32,7 +41,7 @@ public class Task {
     }
 
     public boolean isRunning() {
-        return end == null;
+        return stop == null;
     }
 
     public String getName() {
@@ -43,11 +52,11 @@ public class Task {
         this.name = name;
     }
 
-    public void setStart(LocalTime start) {
+    public void setStart(LocalDateTime start) {
         this.start = start;
     }
 
-    public LocalTime getStart() {
+    public LocalDateTime getStart() {
         return start;
     }
 
@@ -56,20 +65,32 @@ public class Task {
         return TimeUtils.timeAsString(getStart());
     }
 
-    public void setEnd(LocalTime end) {
-        this.end = end;
+    public void setStop(LocalDateTime stop) {
+        this.stop = stop;
     }
 
-    public LocalTime getEnd() {
-        return end != null ? end : LocalTime.now();
+    public LocalDateTime getStop() {
+        return stop != null ? stop : LocalDateTime.now();
     }
 
-    public String getEndString() {
-        return TimeUtils.timeAsString(getEnd());
+    public String getStopString() {
+        return TimeUtils.timeAsString(getStop());
     }
 
     public ArrayList<Tag> getTags() {
-        return tags;
+        TaskStopwatchService service = MainActivity.getInstance().getService();
+        ArrayList<Tag> ret = new ArrayList<>();
+        for (String tagName: tags) {
+            ret.add(service.getTagByName(tagName));
+        }
+        return ret;
     }
 
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
 }

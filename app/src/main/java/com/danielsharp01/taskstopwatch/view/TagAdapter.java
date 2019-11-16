@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.danielsharp01.taskstopwatch.MainActivity;
 import com.danielsharp01.taskstopwatch.R;
 import com.danielsharp01.taskstopwatch.model.Tag;
 
@@ -21,11 +22,11 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder>
 
     public TagAdapter(Context context)
     {
-        this.data.add(new Tag("Job", "red"));
-        this.data.add(new Tag("School", "blue"));
-        this.data.add(new Tag("Project", "green"));
-        this.data.add(new Tag("Gaming", "yellow"));
         this.context = context;
+        MainActivity.getInstance().getService().queryTags(tags -> {
+            data.addAll(tags);
+            notifyDataSetChanged();
+        });
     }
 
     @NonNull

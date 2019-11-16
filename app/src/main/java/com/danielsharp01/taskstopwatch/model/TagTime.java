@@ -7,15 +7,24 @@ import org.threeten.bp.Duration;
 public class TagTime {
     private Tag tag;
     private Duration duration;
+    private Duration activeDuration;
 
     public TagTime(Tag tag, Duration duration) {
         this.tag = tag;
         this.duration = duration;
     }
 
+    public void addDuration(Duration duration) {
+        this.duration = Duration.ofNanos(this.duration.toNanos() + duration.toNanos());
+    }
+
+    public void setActiveDuration(Duration duration) {
+        activeDuration = duration;
+    }
+
     public String getDurationString()
     {
-        return TimeUtils.durationAsLongString(duration);
+        return TimeUtils.durationAsLongString(getDuration());
     }
 
     public Tag getTag() {
@@ -23,6 +32,6 @@ public class TagTime {
     }
 
     public Duration getDuration() {
-        return duration;
+        return Duration.ofNanos(duration.toNanos() + (activeDuration != null ? activeDuration.toNanos() : 0));
     }
 }

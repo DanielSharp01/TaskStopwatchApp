@@ -1,6 +1,7 @@
 package com.danielsharp01.taskstopwatch;
 
 import org.threeten.bp.Duration;
+import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.LocalTime;
 
 public class TimeUtils {
@@ -10,11 +11,11 @@ public class TimeUtils {
         int minutes = (int)((duration.getSeconds() / 60) % 60);
         int seconds = (int)(duration.getSeconds() % 60);
 
-        return "" + doubleDigitConditionally(hours, false)
-                + ":" + doubleDigitConditionally(minutes, hours > 0) + ":" + doubleDigitConditionally(seconds, true);
+        return "" + (hours > 0 ? doubleDigitConditionally(hours, false) + ":" : "")
+                + doubleDigitConditionally(minutes, hours > 0) + ":" + doubleDigitConditionally(seconds, true);
     }
 
-    public static String timeAsString(LocalTime time)
+    public static String timeAsString(LocalDateTime time)
     {
         return "" + doubleDigitConditionally(time.getHour(), false)
                 + ":" + doubleDigitConditionally(time.getMinute(), true)

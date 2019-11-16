@@ -17,28 +17,19 @@ import com.danielsharp01.taskstopwatch.model.Tag;
 import com.danielsharp01.taskstopwatch.model.Task;
 import com.google.android.flexbox.FlexboxLayout;
 
-import org.threeten.bp.LocalTime;
-
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder>
 {
     private ArrayList<Task> data = new ArrayList<>();
     private Context context;
 
-    public TaskAdapter(Context context)
-    {
-        this.data.add(new Task("New task", LocalTime.of(12, 0, 0), LocalTime.of(13,0,0), new Tag[] { new Tag("Work", "red") }));
-        this.data.add(new Task("New task", LocalTime.of(12, 0, 0), LocalTime.of(13,0,0), new Tag[] { new Tag("Work", "red") }));
-        this.data.add(new Task("New task", LocalTime.of(12, 0, 0), LocalTime.of(13,0,0), new Tag[] { new Tag("Work", "red") }));
-        this.data.add(new Task("New task", LocalTime.of(12, 0, 0), LocalTime.of(13,0,0), new Tag[] { new Tag("Work", "red") }));
-        this.data.add(new Task("New task", LocalTime.of(12, 0, 0), LocalTime.of(13,0,0), new Tag[] { new Tag("Work", "red") }));
-        this.data.add(new Task("New task", LocalTime.of(12, 0, 0), LocalTime.of(13,0,0), new Tag[] { new Tag("Work", "red") }));
-        this.data.add(new Task("New task", LocalTime.of(12, 0, 0), LocalTime.of(13,0,0), new Tag[] { new Tag("Work", "red") }));
-        this.data.add(new Task("New task", LocalTime.of(12, 0, 0), LocalTime.of(13,0,0), new Tag[] { new Tag("Work", "red") }));
-        this.data.add(new Task("New task", LocalTime.of(12, 0, 0), LocalTime.of(13,0,0), new Tag[] { new Tag("Work", "red") }));
-        this.data.add(new Task("New task2", LocalTime.of(13, 0, 0), null, new Tag[] { }));
+    public TaskAdapter(Context context, Collection<Task> data) {
         this.context = context;
+        for (Task task: data) {
+            if (!task.isDisabled()) this.data.add(task);
+        }
     }
 
     @NonNull
@@ -101,7 +92,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
             this.tvName.setText(task.getName());
             this.tvTimeStart.setText(task.getStartString());
-            this.tvTimeEnd.setText(task.getEndString());
+            this.tvTimeEnd.setText(task.getStopString());
             this.tvTime.setText(task.getDurationString());
             this.btnAction.setBackground(context.getResources().getDrawable(task.isRunning() ? R.drawable.ic_stop_24dp : R.drawable.ic_refresh_24dp));
 
@@ -109,7 +100,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
         @Override
         public void tick() {
-            tvTimeEnd.setText(task.getEndString());
+            tvTimeEnd.setText(task.getStopString());
             tvTime.setText(task.getDurationString());
         }
     }

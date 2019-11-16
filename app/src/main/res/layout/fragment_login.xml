@@ -9,6 +9,13 @@
     android:paddingTop="160dp"
     tools:context=".view.LoginFragment">
 
+    <TextView
+        android:id="@+id/tvError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:text="ERROR" android:visibility="invisible"
+        android:textColor="@color/niceRed"
+        android:textStyle="bold">
+    </TextView>
     <EditText
         android:id="@+id/editUsername"
         android:layout_width="wrap_content"
