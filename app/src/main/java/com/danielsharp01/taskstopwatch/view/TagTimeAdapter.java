@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,11 +22,13 @@ public class TagTimeAdapter extends RecyclerView.Adapter<TagTimeAdapter.TagTimeV
 {
     private ArrayList<TagTime> data = new ArrayList<>();
     private Context context;
+    private @LayoutRes int layout;
 
-    public TagTimeAdapter(Context context, Collection<TagTime> data)
+    public TagTimeAdapter(Context context, Collection<TagTime> data, @LayoutRes int layout)
     {
         this.context = context;
         this.data.addAll(data);
+        this.layout = layout;
     }
 
     @NonNull
@@ -33,7 +36,7 @@ public class TagTimeAdapter extends RecyclerView.Adapter<TagTimeAdapter.TagTimeV
     public TagTimeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i)
     {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.tag_time, parent, false);
+        View view = inflater.inflate(layout, parent, false);
         return new TagTimeViewHolder(view);
     }
 

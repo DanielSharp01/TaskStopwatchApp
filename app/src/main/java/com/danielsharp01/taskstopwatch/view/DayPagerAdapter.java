@@ -126,7 +126,7 @@ public class DayPagerAdapter extends RecyclerView.Adapter<DayPagerAdapter.DayVie
                         }
                     }
                 }
-                recyclerViewTags.setAdapter(new TagTimeAdapter(context, tagTimes.values()));
+                recyclerViewTags.setAdapter(new TagTimeAdapter(context, tagTimes.values(), R.layout.tag_time));
             });
 
             // TODO: New tasks should be tied to strict mode otherwise add you can't add tasks

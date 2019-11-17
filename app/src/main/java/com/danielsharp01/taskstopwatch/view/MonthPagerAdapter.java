@@ -79,7 +79,7 @@ public class MonthPagerAdapter extends RecyclerView.Adapter<MonthPagerAdapter.Mo
             super(itemView);
             recyclerViewTags = itemView.findViewById(R.id.recyclerViewTags);
             recyclerViewTags.setLayoutManager(new LinearLayoutManager(context));
-            recyclerViewTags.setAdapter(new TagTimeAdapter(context, new ArrayList<>()));
+            recyclerViewTags.setAdapter(new TagTimeAdapter(context, new ArrayList<>(), R.layout.tag_time_small));
             recyclerViewTags.setItemAnimator(new DefaultItemAnimator());
 
             recyclerViewMonth = itemView.findViewById(R.id.recyclerViewMonth);
@@ -129,7 +129,7 @@ public class MonthPagerAdapter extends RecyclerView.Adapter<MonthPagerAdapter.Mo
                         }
                     }
                 }
-                recyclerViewTags.setAdapter(new TagTimeAdapter(context, tagTimes.values()));
+                recyclerViewTags.setAdapter(new TagTimeAdapter(context, tagTimes.values(), R.layout.tag_time_small));
             });
         }
 

@@ -17,34 +17,53 @@
         <item name="android:paddingTop">12dp</item>
         <item name="android:paddingBottom">12dp</item>
         <item name="android:textColor">@color/foreground</item>
-        <item name="android:textSize">12dp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:background">@drawable/button_drawable</item>
 
     </style>
 
     <style name="textViewStyle" parent="android:Widget.TextView">
         <item name="android:textColor">@color/foreground</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="smallTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/foreground</item>
+        <item name="android:textSize">8sp</item>
     </style>
 
     <style name="timeTextViewStyle" parent="android:Widget.TextView">
         <item name="android:textColor">@color/foregroundDark</item>
-        <item name="android:textSize">12dp</item>
+        <item name="android:textSize">8sp</item>
+    </style>
+
+    <style name="headerTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="tag" parent="textViewStyle">
-        <item name="android:paddingStart">12dp</item>
-        <item name="android:paddingEnd">12dp</item>
-        <item name="android:paddingTop">6dp</item>
-        <item name="android:paddingBottom">6dp</item>
-        <item name="android:layout_marginTop">4dp</item>
-        <item name="android:layout_marginStart">4dp</item>
-        <item name="android:layout_marginEnd">4dp</item>
-        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:layout_marginStart">2dp</item>
+        <item name="android:layout_marginEnd">2dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
         <item name="android:elevation">6dp</item>
+    </style>
+
+    <style name="smallTag" parent="tag">
+        <item name="android:textColor">@color/foreground</item>
+        <item name="android:textSize">8sp</item>
     </style>
 
     <style name="editTextStyle" parent="android:Widget.EditText">
         <item name="android:textColor">@color/foreground</item>
         <item name="android:textColorHint">@color/foregroundDark</item>
+    </style>
+
+    <style name="smallEditTextStyle" parent="editTextStyle">
+        <item name="android:textSize">12sp</item>
     </style>
 </resources>

@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="160dp"
+    android:layout_width="70dp"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="4dp"
     android:layout_height="match_parent"
+    android:background="@drawable/day_summary_background"
     tools:background="@color/background">
     <TextView
         android:id="@+id/tvDay"
         android:layout_width="match_parent"
-        android:layout_height="32dp"
+        android:layout_height="16dp"
+        style="@style/smallTextViewStyle"
         android:text="Monday"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -17,5 +19,5 @@
         android:scrollbarThumbVertical="@drawable/scrollbar_thumb_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/tag_time" />
+        tools:listitem="@layout/tag_time_small" />
 </LinearLayout>

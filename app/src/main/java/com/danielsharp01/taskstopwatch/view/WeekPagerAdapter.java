@@ -80,7 +80,7 @@ public class WeekPagerAdapter extends RecyclerView.Adapter<WeekPagerAdapter.Week
             super(itemView);
             recyclerViewTags = itemView.findViewById(R.id.recyclerViewTags);
             recyclerViewTags.setLayoutManager(new LinearLayoutManager(context));
-            recyclerViewTags.setAdapter(new TagTimeAdapter(context, new ArrayList<>()));
+            recyclerViewTags.setAdapter(new TagTimeAdapter(context, new ArrayList<>(), R.layout.tag_time_small));
             recyclerViewTags.setItemAnimator(new DefaultItemAnimator());
 
             recyclerViewWeek = itemView.findViewById(R.id.recyclerViewWeek);
@@ -131,7 +131,7 @@ public class WeekPagerAdapter extends RecyclerView.Adapter<WeekPagerAdapter.Week
                         }
                     }
                 }
-                recyclerViewTags.setAdapter(new TagTimeAdapter(context, tagTimes.values()));
+                recyclerViewTags.setAdapter(new TagTimeAdapter(context, tagTimes.values(), R.layout.tag_time_small));
             });
         }
 

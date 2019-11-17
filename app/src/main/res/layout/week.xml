@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="October 28 - November 3"
-        android:textSize="20sp"
+        style="@style/headerTextViewStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -53,10 +53,10 @@
         android:layout_width="match_parent"
         android:scrollbars="vertical"
         android:scrollbarThumbVertical="@drawable/scrollbar_thumb_vertical"
-        android:layout_height="120dp"
+        android:layout_height="70dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvYear"
-        tools:listitem="@layout/tag_time" />
+        tools:listitem="@layout/tag_time_small" />
 
 
     <androidx.recyclerview.widget.RecyclerView

@@ -56,7 +56,7 @@ class DaySummaryAdapter extends RecyclerView.Adapter<DaySummaryAdapter.DaySummar
         View view = inflater.inflate(R.layout.summary_day, parent, false);
         if (type.equals("month")) {
             ViewGroup.LayoutParams params = view.getLayoutParams();
-            params.height = (int) (160 * context.getResources().getDisplayMetrics().density);
+            params.height = (int) (70 * context.getResources().getDisplayMetrics().density);
             view.setLayoutParams(params);
         }
         return new DaySummaryViewHolder(view);
@@ -87,7 +87,7 @@ class DaySummaryAdapter extends RecyclerView.Adapter<DaySummaryAdapter.DaySummar
             super(itemView);
             recyclerView = itemView.findViewById(R.id.recyclerView);
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new TagTimeAdapter(context, new ArrayList<>()));
+            recyclerView.setAdapter(new TagTimeAdapter(context, new ArrayList<>(), R.layout.tag_time_day_summary));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
 
             if (touchDisableListener != null) {
@@ -151,7 +151,7 @@ class DaySummaryAdapter extends RecyclerView.Adapter<DaySummaryAdapter.DaySummar
                             }
                         }
                     }
-                    recyclerView.setAdapter(new TagTimeAdapter(context, tagTimes.values()));
+                    recyclerView.setAdapter(new TagTimeAdapter(context, tagTimes.values(), R.layout.tag_time_day_summary));
                 });
             }
             else {
@@ -181,7 +181,7 @@ class DaySummaryAdapter extends RecyclerView.Adapter<DaySummaryAdapter.DaySummar
                         }
                     }
                 }
-                recyclerView.setAdapter(new TagTimeAdapter(context, tagTimes.values()));
+                recyclerView.setAdapter(new TagTimeAdapter(context, tagTimes.values(), R.layout.tag_time_day_summary));
             }
             tvDay.setText(String.format("%s %s", type.equals("month") ? String.valueOf(date.getDayOfMonth()) : "", date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH)));
 

@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="2019-10-27"
-        android:textSize="20sp"
+        style="@style/headerTextViewStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -64,7 +64,7 @@
         android:scrollbarThumbVertical="@drawable/scrollbar_thumb_vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newTask"
-        tools:listitem="@layout/tag_time" />
+        tools:listitem="@layout/tag_time_small" />
 
 
     <androidx.recyclerview.widget.RecyclerView

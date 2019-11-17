@@ -14,7 +14,7 @@ tools:context=".view.SettingsFragment">
     android:layout_marginStart="16dp"
     android:layout_marginTop="16dp"
     android:text="@string/tags"
-    android:textSize="20sp"
+    style="@style/headerTextViewStyle"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,5 +29,5 @@ tools:context=".view.SettingsFragment">
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
-        tools:listitem="@layout/tag_time" />
+        tools:listitem="@layout/tag_time_small" />
 </androidx.constraintlayout.widget.ConstraintLayout>
