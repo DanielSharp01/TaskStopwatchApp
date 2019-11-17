@@ -1,4 +1,4 @@
-package com.danielsharp01.taskstopwatch.view;
+package com.danielsharp01.taskstopwatch.view.pager;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,21 +13,17 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.danielsharp01.taskstopwatch.MainActivity;
+import com.danielsharp01.taskstopwatch.DI;
 import com.danielsharp01.taskstopwatch.R;
-import com.danielsharp01.taskstopwatch.Tickable;
-import com.danielsharp01.taskstopwatch.model.Tag;
-import com.danielsharp01.taskstopwatch.model.TagTime;
-import com.danielsharp01.taskstopwatch.model.Task;
+import com.danielsharp01.taskstopwatch.view.TouchDisableListener;
+import com.danielsharp01.taskstopwatch.view.ViewPagerListener;
+import com.danielsharp01.taskstopwatch.view.adapter.DaySummaryAdapter;
+import com.danielsharp01.taskstopwatch.view.adapter.TagTimeAdapter;
 
-import org.threeten.bp.Duration;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.TextStyle;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import static org.threeten.bp.temporal.ChronoUnit.MONTHS;
 
@@ -63,23 +59,21 @@ public class MonthPagerAdapter extends RecyclerView.Adapter<MonthPagerAdapter.Mo
         viewHolder.bind(now.plusMonths(i - Integer.MAX_VALUE / 2));
     }
 
-    public class MonthViewHolder extends RecyclerView.ViewHolder implements TouchDisableListener, Tickable {
-        private RecyclerView recyclerViewTags;
+    public class MonthViewHolder extends RecyclerView.ViewHolder implements TouchDisableListener {
+        private TagTimeAdapter tagTimeAdapter;
         private RecyclerView recyclerViewMonth;
 
         private TextView tvMonth;
         private TextView tvYear;
 
-        private Map<String, TagTime> tagTimes = new HashMap<>();
-        private Task activeTask = null;
-
 
         public MonthViewHolder(@NonNull View itemView)
         {
             super(itemView);
-            recyclerViewTags = itemView.findViewById(R.id.recyclerViewTags);
+            RecyclerView recyclerViewTags = itemView.findViewById(R.id.recyclerViewTags);
             recyclerViewTags.setLayoutManager(new LinearLayoutManager(context));
-            recyclerViewTags.setAdapter(new TagTimeAdapter(context, new ArrayList<>(), R.layout.tag_time_small));
+            tagTimeAdapter = new TagTimeAdapter(context, R.layout.tag_time_small);
+            recyclerViewTags.setAdapter(tagTimeAdapter);
             recyclerViewTags.setItemAnimator(new DefaultItemAnimator());
 
             recyclerViewMonth = itemView.findViewById(R.id.recyclerViewMonth);
@@ -92,58 +86,21 @@ public class MonthPagerAdapter extends RecyclerView.Adapter<MonthPagerAdapter.Mo
             btnPrev.setOnClickListener((v) -> viewPagerListener.previous());
             Button btnNext = itemView.findViewById(R.id.btnNext);
             btnNext.setOnClickListener((v) -> viewPagerListener.next());
-            MainActivity.getInstance().subscribeTickable(this);
         }
 
         public void bind(LocalDate date)
         {
-            activeTask = null;
-            tagTimes.clear();
             tvMonth.setText(date.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH));
             tvYear.setText(String.valueOf(date.getYear()));
 
-            MainActivity.getInstance().getService().queryTasks(date, "month", data -> {
-            recyclerViewMonth.setAdapter(new DaySummaryAdapter(context, "month", date, data, this));
-                for (Task task: data) {
-                    if (task.isDisabled()) continue;
-
-                    if (task.isRunning()) activeTask = task;
-
-                    for (Tag tag: task.getTags()) {
-                        if (task.isRunning()) {
-                            if (!tagTimes.containsKey(tag.getName())) {
-                                tagTimes.put(tag.getName(), new TagTime(tag, Duration.ofNanos(0)));
-                                tagTimes.get(tag.getName()).setActiveDuration(task.getDuration());
-                            }
-                            else {
-                                tagTimes.get(tag.getName()).setActiveDuration(task.getDuration());
-                            }
-                        }
-                        else {
-                            if (!tagTimes.containsKey(tag.getName())) {
-                                tagTimes.put(tag.getName(), new TagTime(tag, task.getDuration()));
-                            }
-                            else {
-                                tagTimes.get(tag.getName()).addDuration(task.getDuration());
-                            }
-                        }
-                    }
-                }
-                recyclerViewTags.setAdapter(new TagTimeAdapter(context, tagTimes.values(), R.layout.tag_time_small));
-            });
+            recyclerViewMonth.setAdapter(new DaySummaryAdapter(context, "month", date, this));
+            tagTimeAdapter.bindStorage(DI.getStorage().getAggregrateTaskStorageForMonth(date));
+            DI.getTaskStopwatchService().queryTasks(date, "month");
         }
 
         @Override
         public void requestTouchShouldDisable() {
             recyclerViewMonth.requestDisallowInterceptTouchEvent(true);
-        }
-
-        @Override
-        public void tick() {
-            if (activeTask == null) return;
-            for (Tag tag: activeTask.getTags()) {
-                tagTimes.get(tag.getName()).setActiveDuration(activeTask.getDuration());
-            }
         }
     }
 }

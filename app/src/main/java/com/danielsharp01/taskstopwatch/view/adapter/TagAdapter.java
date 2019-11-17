@@ -1,4 +1,4 @@
-package com.danielsharp01.taskstopwatch.view;
+package com.danielsharp01.taskstopwatch.view.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,21 +12,28 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.danielsharp01.taskstopwatch.MainActivity;
 import com.danielsharp01.taskstopwatch.R;
 import com.danielsharp01.taskstopwatch.model.Tag;
+import com.danielsharp01.taskstopwatch.storage.TagStorage;
+import com.danielsharp01.taskstopwatch.storage.TaskStorage;
 
 import java.util.ArrayList;
 
 public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder>
 {
-    private ArrayList<Tag> data = new ArrayList<>();
     private Context context;
+    private TagStorage storage;
 
     public TagAdapter(Context context)
     {
         this.context = context;
-        MainActivity.getInstance().getService().queryTags(tags -> {
-            data.addAll(tags);
-            notifyDataSetChanged();
-        });
+    }
+
+    public void bindStorage(@NonNull TagStorage storage) {
+        if (this.storage != null) {
+            this.storage.unbindAdapter(this);
+        }
+
+        this.storage = storage;
+        this.storage.bindAdapter(this);
     }
 
     @NonNull
@@ -41,13 +48,13 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder>
     @Override
     public void onBindViewHolder(@NonNull TagViewHolder viewHolder, int i)
     {
-        viewHolder.bind(data.get(i));
+        viewHolder.bind(storage.getTagList().get(i));
     }
 
     @Override
     public int getItemCount()
     {
-        return data.size();
+        return storage != null ? storage.getTagList().size() : 0;
     }
 
     public class TagViewHolder extends RecyclerView.ViewHolder

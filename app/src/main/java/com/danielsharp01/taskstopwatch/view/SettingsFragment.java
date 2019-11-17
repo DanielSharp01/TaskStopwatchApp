@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.danielsharp01.taskstopwatch.DI;
 import com.danielsharp01.taskstopwatch.MainActivity;
 import com.danielsharp01.taskstopwatch.R;
 
@@ -29,11 +30,10 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         TextView tvLoggedInAs = view.findViewById(R.id.tvLoggedInAs);
-        tvLoggedInAs.setText(getResources().getString(R.string.logged_in_as, MainActivity.getInstance().getService().getUsername()));
+        tvLoggedInAs.setText(getResources().getString(R.string.logged_in_as, DI.getTaskStopwatchService().getUsername()));
         Button btnLogout = view.findViewById(R.id.btnLogout);
         btnLogout.setOnClickListener(v -> {
-            MainActivity.getInstance().getService().logout();
-            Navigation.findNavController(view).navigate(R.id.action_logout);
+            DI.getTaskStopwatchService().logout();
         });
     }
 }

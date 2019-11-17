@@ -1,4 +1,4 @@
-package com.danielsharp01.taskstopwatch.view;
+package com.danielsharp01.taskstopwatch.view.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,25 +10,34 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.danielsharp01.taskstopwatch.MainActivity;
 import com.danielsharp01.taskstopwatch.R;
 import com.danielsharp01.taskstopwatch.Tickable;
 import com.danielsharp01.taskstopwatch.model.TagTime;
-
-import java.util.ArrayList;
-import java.util.Collection;
+import com.danielsharp01.taskstopwatch.storage.TagTimeStorage;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 public class TagTimeAdapter extends RecyclerView.Adapter<TagTimeAdapter.TagTimeViewHolder>
 {
-    private ArrayList<TagTime> data = new ArrayList<>();
     private Context context;
     private @LayoutRes int layout;
+    private BiMap<Integer, TagTimeViewHolder> viewHolders = HashBiMap.create();
+    private TagTimeStorage storage;
 
-    public TagTimeAdapter(Context context, Collection<TagTime> data, @LayoutRes int layout)
+    public TagTimeAdapter(Context context, @LayoutRes int layout)
     {
         this.context = context;
-        this.data.addAll(data);
         this.layout = layout;
+    }
+
+    public void bindStorage(@NonNull TagTimeStorage storage) {
+        if (this.storage != null) {
+            this.storage.unbindTagTimeAdapter(this);
+            this.storage.unbindSelf();
+        }
+
+        this.storage = storage;
+        this.storage.bindTagTimeAdapter(this);
     }
 
     @NonNull
@@ -43,13 +52,25 @@ public class TagTimeAdapter extends RecyclerView.Adapter<TagTimeAdapter.TagTimeV
     @Override
     public void onBindViewHolder(@NonNull TagTimeViewHolder viewHolder, int i)
     {
-        viewHolder.bind(data.get(i));
+        viewHolders.put(i, viewHolder);
+        viewHolder.bind(storage.getTagTimeList().get(i));
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull TagTimeViewHolder holder) {
+        super.onViewRecycled(holder);
+        viewHolders.inverse().remove(holder);
     }
 
     @Override
     public int getItemCount()
     {
-        return data.size();
+        return storage != null ? storage.getTagTimeList().size() : 0;
+    }
+
+    public void notifyItemTick(int position) {
+        if (viewHolders.containsKey(position))
+            viewHolders.get(position).tick();
     }
 
     public class TagTimeViewHolder extends RecyclerView.ViewHolder implements Tickable
@@ -64,7 +85,6 @@ public class TagTimeAdapter extends RecyclerView.Adapter<TagTimeAdapter.TagTimeV
             super(itemView);
             tvTag = itemView.findViewById(R.id.tvTag);
             tvDuration = itemView.findViewById(R.id.tvDuration);
-            MainActivity.getInstance().subscribeTickable(this);
         }
 
         public void bind(TagTime tagTime)

@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.danielsharp01.taskstopwatch.DI;
 import com.danielsharp01.taskstopwatch.MainActivity;
 import com.danielsharp01.taskstopwatch.R;
 import com.danielsharp01.taskstopwatch.api.TaskStopwatchService;
@@ -37,7 +38,7 @@ public class LoginFragment extends Fragment {
         EditText editPassword = view.findViewById(R.id.editPassword);
         Button button = view.findViewById(R.id.btnLogin);
         button.setOnClickListener(v -> {
-            MainActivity.getInstance().getService().tryLogin(editUsername.getText().toString(), editPassword.getText().toString(), loginResult -> {
+            DI.getTaskStopwatchService().tryLogin(editUsername.getText().toString(), editPassword.getText().toString(), loginResult -> {
                 if (loginResult == TaskStopwatchService.LoginResult.success) {
                     tvError.setVisibility(View.INVISIBLE);
                     Navigation.findNavController(view).navigate(R.id.action_login);

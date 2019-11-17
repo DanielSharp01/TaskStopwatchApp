@@ -1,5 +1,6 @@
 package com.danielsharp01.taskstopwatch.model;
 
+import com.danielsharp01.taskstopwatch.DI;
 import com.danielsharp01.taskstopwatch.MainActivity;
 import com.danielsharp01.taskstopwatch.TimeUtils;
 import com.danielsharp01.taskstopwatch.api.TaskStopwatchService;
@@ -78,10 +79,9 @@ public class Task {
     }
 
     public ArrayList<Tag> getTags() {
-        TaskStopwatchService service = MainActivity.getInstance().getService();
         ArrayList<Tag> ret = new ArrayList<>();
         for (String tagName: tags) {
-            ret.add(service.getTagByName(tagName));
+            ret.add(DI.getStorage().getTagByName(tagName));
         }
         return ret;
     }

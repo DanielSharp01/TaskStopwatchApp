@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.danielsharp01.taskstopwatch.DI;
 import com.danielsharp01.taskstopwatch.R;
+import com.danielsharp01.taskstopwatch.view.adapter.TagAdapter;
 
 
 public class TagsFragment extends Fragment {
@@ -29,7 +31,11 @@ public class TagsFragment extends Fragment {
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new TagAdapter(getContext()));
+        TagAdapter adapter = new TagAdapter(getContext());
+        recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        adapter.bindStorage(DI.getStorage().getTagStorage());
+        DI.getTaskStopwatchService().queryTags();
     }
 }

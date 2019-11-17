@@ -1,4 +1,4 @@
-package com.danielsharp01.taskstopwatch.view;
+package com.danielsharp01.taskstopwatch.view.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,26 +10,32 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.danielsharp01.taskstopwatch.MainActivity;
 import com.danielsharp01.taskstopwatch.R;
 import com.danielsharp01.taskstopwatch.Tickable;
 import com.danielsharp01.taskstopwatch.model.Tag;
 import com.danielsharp01.taskstopwatch.model.Task;
+import com.danielsharp01.taskstopwatch.storage.TaskStorage;
 import com.google.android.flexbox.FlexboxLayout;
-
-import java.util.ArrayList;
-import java.util.Collection;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder>
 {
-    private ArrayList<Task> data = new ArrayList<>();
     private Context context;
+    private BiMap<Integer, TaskAdapter.TaskViewHolder> viewHolders = HashBiMap.create();
+    private TaskStorage storage;
 
-    public TaskAdapter(Context context, Collection<Task> data) {
+    public TaskAdapter(Context context) {
         this.context = context;
-        for (Task task: data) {
-            if (!task.isDisabled()) this.data.add(task);
+    }
+
+    public void bindStorage(@NonNull TaskStorage storage) {
+        if (this.storage != null) {
+            this.storage.unbindTaskAdapter(this);
         }
+
+        this.storage = storage;
+        this.storage.bindTaskAdapter(this);
     }
 
     @NonNull
@@ -44,13 +50,25 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     @Override
     public void onBindViewHolder(@NonNull TaskViewHolder viewHolder, int i)
     {
-        viewHolder.bind(data.get(i));
+        viewHolders.put(i, viewHolder);
+        viewHolder.bind(storage.getTaskList().get(i));
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull TaskViewHolder holder) {
+        super.onViewRecycled(holder);
+        viewHolders.inverse().remove(holder);
     }
 
     @Override
     public int getItemCount()
     {
-        return data.size();
+        return storage != null ? storage.getTaskList().size() : 0;
+    }
+
+    public void notifyItemTick(int position) {
+        if (viewHolders.containsKey(position))
+            viewHolders.get(position).tick();
     }
 
     public class TaskViewHolder extends RecyclerView.ViewHolder implements Tickable
@@ -73,7 +91,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             tvTimeEnd = itemView.findViewById(R.id.tvTimeEnd);
             tvTime = itemView.findViewById(R.id.tvTime);
             btnAction = itemView.findViewById(R.id.btnAction);
-            MainActivity.getInstance().subscribeTickable(this);
         }
 
         public void bind(Task task)
