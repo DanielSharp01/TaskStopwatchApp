@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent" android:padding="24dp" android:background="@color/background">
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        style="@style/headerTextViewStyle" />
+    <GridLayout
+        android:layout_marginTop="24dp" android:layout_marginBottom="24dp" android:id="@+id/gridLayout" android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:columnCount="4" android:layout_gravity="center">
+
+        <View
+            android:id="@+id/rect_red"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_margin="4dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@color/niceRed" />
+
+        <View
+            android:id="@+id/rect_green"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:layout_margin="4dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@color/niceGreen" />
+
+        <View
+            android:id="@+id/rect_yellow"
+            android:layout_row="0"
+            android:layout_column="2"
+            android:layout_margin="4dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@color/niceYellow" />
+
+        <View
+            android:id="@+id/rect_blue"
+            android:layout_row="0"
+            android:layout_column="3"
+            android:layout_margin="4dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@color/niceBlue" />
+
+        <View
+            android:id="@+id/rect_orange"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:layout_margin="4dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@color/niceOrange" />
+
+        <View
+            android:id="@+id/rect_white"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:layout_margin="4dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@color/niceWhite" />
+
+        <View
+            android:id="@+id/rect_black"
+            android:layout_row="1"
+            android:layout_column="2"
+            android:layout_margin="4dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@color/niceBlack" />
+
+        <View
+            android:id="@+id/rect_gray"
+            android:layout_row="1"
+            android:layout_column="3"
+            android:layout_margin="4dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@color/niceGray" />
+
+        <View
+            android:id="@+id/rect_brown"
+            android:layout_row="2"
+            android:layout_column="0"
+            android:layout_margin="4dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@color/niceBrown" />
+
+        <View
+            android:id="@+id/rect_ocean"
+            android:layout_row="2"
+            android:layout_column="1"
+            android:layout_margin="4dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@color/niceOcean" />
+
+        <View
+            android:id="@+id/rect_purple"
+            android:layout_row="2"
+            android:layout_column="2"
+            android:layout_margin="4dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@color/nicePurple" />
+
+        <View
+            android:id="@+id/rect_pink"
+            android:layout_row="2"
+            android:layout_column="3"
+            android:layout_margin="4dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@color/nicePink" />
+    </GridLayout>
+
+    <Button
+        android:layout_gravity="end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnCancel"
+        android:background="@drawable/button_drawable_danger"
+        android:text="@string/cancel" />
+</LinearLayout>

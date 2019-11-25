@@ -18,11 +18,11 @@ public class Timer {
         timeHandler.postAtTime(this::tick, LocalTime.now().withNano(0).plusSeconds(1).getNano() / 1000000);
     }
 
-    void subscribeTickable(Tickable tickable) {
+    public void subscribeTickable(Tickable tickable) {
         tickables.add(tickable);
     }
 
-    void unsubscribeTickable(Tickable tickable) {
+    public void unsubscribeTickable(Tickable tickable) {
         tickables.remove(tickable);
     }
 
@@ -30,7 +30,7 @@ public class Timer {
         for (Tickable tickable: tickables) {
             tickable.tick();
         }
-        timeHandler.postDelayed(this::tick, 1000);
+        timeHandler.postDelayed(this::tick, 100);
     }
 
     public void stop() {

@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.flexbox.FlexboxLayout
-        android:id="@+id/tagLayout"
+        android:id="@+id/newTagLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:elevation="6dp"
@@ -16,6 +16,7 @@
         app:alignItems="center">
 
         <Button
+            android:id="@+id/btnAddTag"
             android:layout_marginStart="8dp"
             android:layout_width="24dp"
             android:layout_height="24dp"
@@ -33,7 +34,7 @@
         android:background="@color/elementBackground">
 
         <EditText
-            android:id="@+id/tvName"
+            android:id="@+id/etName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -44,7 +45,7 @@
             android:hint="@string/new_task"/>
 
         <Button
-            android:id="@+id/btnAction"
+            android:id="@+id/btnStartTask"
             android:background="@drawable/ic_play_arrow_24dp"
             android:layout_width="24dp"
             android:layout_height="24dp"/>

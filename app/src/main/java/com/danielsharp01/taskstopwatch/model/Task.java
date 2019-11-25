@@ -1,35 +1,43 @@
 package com.danielsharp01.taskstopwatch.model;
 
-import com.danielsharp01.taskstopwatch.DI;
-import com.danielsharp01.taskstopwatch.MainActivity;
 import com.danielsharp01.taskstopwatch.TimeUtils;
-import com.danielsharp01.taskstopwatch.api.TaskStopwatchService;
+import com.danielsharp01.taskstopwatch.api.TagListTypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
 
 import org.threeten.bp.Duration;
 import org.threeten.bp.LocalDateTime;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 
 public class Task {
     private String id;
     private String name;
     private LocalDateTime start;
     private LocalDateTime stop;
-    private ArrayList<String> tags = new ArrayList<>();
+    @JsonAdapter(TagListTypeAdapter.class)
+    private ArrayList<Tag> tags = new ArrayList<>();
     private boolean disabled;
 
-    public Task(String id, String name, LocalDateTime start, LocalDateTime end, String[] tags)
+    public Task() {
+        id = "temporary";
+    }
+
+    public Task(String id, String name, LocalDateTime start, LocalDateTime stop, List<Tag> tags)
     {
         this.id = id;
         this.name = name;
         this.start = start;
-        this.stop = end;
-        Collections.addAll(this.tags, tags);
+        this.stop = stop;
+        this.tags.addAll(tags);
     }
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Duration getDuration() {
@@ -79,11 +87,46 @@ public class Task {
     }
 
     public ArrayList<Tag> getTags() {
-        ArrayList<Tag> ret = new ArrayList<>();
-        for (String tagName: tags) {
-            ret.add(DI.getStorage().getTagByName(tagName));
+        return tags;
+    }
+
+    public boolean hasTag(Tag tag) {
+        for (Tag t: tags) {
+            if (t.getName().equals(tag.getName())) return true;
         }
-        return ret;
+
+        return false;
+    }
+
+    public void addTag(Tag tag) {
+        tags.add(tag);
+    }
+
+    public void addAllTags(List<Tag> tags) {
+        this.tags.addAll(tags);
+    }
+
+    public void changeTag(Tag from, Tag to) {
+        int toRemove = 0;
+        for (int i = 0; i < tags.size(); i++) {
+            if (tags.get(i).getName().equals(from.getName())) {
+                toRemove = i;
+                break;
+            }
+        }
+        tags.remove(toRemove);
+        tags.add(toRemove, to);
+    }
+
+    public void removeTag(Tag tag) {
+        Tag toRemove = null;
+        for (Tag t: tags) {
+            if (t.getName().equals(tag.getName())) {
+                toRemove = t;
+                break;
+            }
+        }
+        tags.remove(toRemove);
     }
 
     public boolean isDisabled() {
@@ -92,5 +135,9 @@ public class Task {
 
     public void setDisabled(boolean disabled) {
         this.disabled = disabled;
+    }
+
+    public Task cloneAtNow() {
+        return new Task("temporary", name, LocalDateTime.now(), null, tags);
     }
 }

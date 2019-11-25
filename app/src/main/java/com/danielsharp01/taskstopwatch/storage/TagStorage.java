@@ -30,4 +30,27 @@ public class TagStorage {
     public ArrayList<Tag> getTagList() {
         return cachedList != null ? cachedList : new ArrayList<>();
     }
+
+    public void changedTag(Tag tag) {
+        for (TagAdapter adapter: adapters)
+        {
+            adapter.notifyItemChanged(cachedList.indexOf(tag));
+        }
+    }
+
+    public void addedTag(Tag tag) {
+        cachedList.add(tag);
+        for (TagAdapter adapter: adapters)
+        {
+            adapter.notifyItemInserted(cachedList.indexOf(tag));
+        }
+    }
+
+    public void removedTag(Tag tag) {
+        for (TagAdapter adapter: adapters)
+        {
+            adapter.notifyItemRemoved(cachedList.indexOf(tag));
+        }
+        cachedList.remove(tag);
+    }
 }

@@ -2,6 +2,7 @@ package com.danielsharp01.taskstopwatch.api;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import org.threeten.bp.Instant;
@@ -17,14 +18,20 @@ public class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
         if (value == null)
             out.nullValue();
         else
-            out.value(value.toInstant((ZoneOffset) ZoneId.systemDefault()).toEpochMilli());
+            out.value(value.toInstant(ZoneId.systemDefault().getRules().getOffset(value)).toEpochMilli());
     }
 
     @Override
     public LocalDateTime read(JsonReader in) throws IOException {
-        if (in != null)
-            return Instant.ofEpochMilli(in.nextLong()).atZone(ZoneId.systemDefault()).toLocalDateTime();
-        else
-            return null;
+        if (in != null) {
+            if (in.peek() != JsonToken.NULL) {
+                return Instant.ofEpochMilli(in.nextLong()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+            }
+            else {
+                in.nextNull();
+                return null;
+            }
+        }
+        else return null;
     }
 }

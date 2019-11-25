@@ -6,8 +6,12 @@ import com.danielsharp01.taskstopwatch.api.TaskStopwatchService;
 import com.danielsharp01.taskstopwatch.navigation.NavigationService;
 import com.danielsharp01.taskstopwatch.storage.Storage;
 
+import java.util.Random;
+
 public class DI {
     private static Storage storage;
+    private static Random random;
+
     public static Storage getStorage() {
         return storage;
     }
@@ -29,8 +33,13 @@ public class DI {
 
     public static void init(AppCompatActivity activity) {
         storage = new Storage();
+        random = new Random();
         navigationService = new NavigationService(activity);
         taskStopwatchService = new TaskStopwatchService(activity.getApplicationContext());
         timer = new Timer();
+    }
+
+    public static Random getRandom() {
+        return random;
     }
 }

@@ -14,32 +14,40 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.danielsharp01.taskstopwatch.DI;
 import com.danielsharp01.taskstopwatch.R;
-import com.danielsharp01.taskstopwatch.model.TagTime;
-import com.danielsharp01.taskstopwatch.model.Task;
 import com.danielsharp01.taskstopwatch.view.TouchDisableListener;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.TextStyle;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Map;
 
 public class DaySummaryAdapter extends RecyclerView.Adapter<DaySummaryAdapter.DaySummaryViewHolder> {
     private Context context;
     private String type;
     private LocalDate startDate;
     private TouchDisableListener touchDisableListener;
+    private ArrayList<TagTimeAdapter> adapters = new ArrayList<>();
 
-    public DaySummaryAdapter(Context context, String type, LocalDate date) {
-        this(context, type, date, null);
+    public DaySummaryAdapter(Context context) {
+        this(context, null);
     }
 
-    public DaySummaryAdapter(Context context, String type, LocalDate date, TouchDisableListener touchDisableListener) {
+    public DaySummaryAdapter(Context context, TouchDisableListener touchDisableListener) {
         this.context = context;
+        this.touchDisableListener = touchDisableListener;
+    }
+
+    public void bind(String type, LocalDate date) {
         this.type = type;
         this.startDate = date;
-        this.touchDisableListener = touchDisableListener;
+        notifyDataSetChanged();
+    }
+
+    public void unbind() {
+        for (TagTimeAdapter adapter: adapters) {
+            adapter.unbindStorage();
+        }
     }
 
     @NonNull
@@ -73,16 +81,14 @@ public class DaySummaryAdapter extends RecyclerView.Adapter<DaySummaryAdapter.Da
         private TextView tvDay;
         private LocalDate date;
 
-        private Map<String, TagTime> tagTimes = new HashMap<>();
-        private Task activeTask = null;
-
 
         public DaySummaryViewHolder(@NonNull View itemView)
         {
             super(itemView);
             recyclerView = itemView.findViewById(R.id.recyclerView);
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            adapter = new TagTimeAdapter(context, R.layout.tag_time_day_summary);
+            adapter = new TagTimeAdapter(context, R.layout.tag_time_day_summary, recyclerView);
+            adapters.add(adapter);
             recyclerView.setAdapter(adapter);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -117,8 +123,6 @@ public class DaySummaryAdapter extends RecyclerView.Adapter<DaySummaryAdapter.Da
 
         public void bind(LocalDate date)
         {
-            activeTask = null;
-            tagTimes.clear();
             this.date = date;
             if (!startDate.getMonth().equals(this.date.getMonth())) {
                 tvDay.setTextColor(context.getResources().getColor(R.color.foregroundDark));

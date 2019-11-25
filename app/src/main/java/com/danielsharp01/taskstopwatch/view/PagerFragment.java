@@ -28,7 +28,11 @@ import static org.threeten.bp.temporal.ChronoUnit.WEEKS;
 
 public class PagerFragment extends Fragment implements ViewPagerListener {
 
+    private DayPagerAdapter dayAdapter = null;
+    private WeekPagerAdapter weekAdapter = null;
+    private MonthPagerAdapter monthAdapter = null;
     private ViewPager2 viewPager;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_pager, container, false);
@@ -77,15 +81,27 @@ public class PagerFragment extends Fragment implements ViewPagerListener {
         DI.getNavigationService().onNavigatedTo(date != null ? date : LocalDate.now());
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (dayAdapter != null) dayAdapter.unbind();
+        if (weekAdapter != null) weekAdapter.unbind();
+        if (monthAdapter != null) monthAdapter.unbind();
+    }
+
     private RecyclerView.Adapter getAdapterFromArguments() {
+        if (dayAdapter != null) dayAdapter.unbind();
+        if (weekAdapter != null) weekAdapter.unbind();
+        if (monthAdapter != null) monthAdapter.unbind();
+
         String type = getArguments().getString("type");
         switch (type) {
             case "day":
-                return new DayPagerAdapter(this, getContext());
+                return dayAdapter = new DayPagerAdapter(this, getContext());
             case "week":
-                return new WeekPagerAdapter(this, getContext());
+                return weekAdapter = new WeekPagerAdapter(this, getContext());
             case "month":
-                return new MonthPagerAdapter(this, getContext());
+                return monthAdapter = new MonthPagerAdapter(this, getContext());
         }
 
         return null;

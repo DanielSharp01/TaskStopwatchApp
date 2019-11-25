@@ -16,7 +16,7 @@
         app:justifyContent="flex_start"
         app:alignItems="center">
         <Button
-            android:id="@+id/addTag"
+            android:id="@+id/btnAddTag"
             android:layout_marginStart="8dp"
             android:layout_width="24dp"
             android:layout_height="24dp"
@@ -41,6 +41,18 @@
             android:background="@android:color/transparent"
             android:padding="4dp"
             android:text="@string/new_task" />
+
+        <EditText
+            android:id="@+id/etName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:padding="4dp"
+            android:text=""
+            android:visibility="gone"
+            style="@style/smallEditTextStyle"
+            android:hint="@string/new_task"/>
 
         <LinearLayout
             android:layout_width="wrap_content"

@@ -1,9 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tvTag"
-    style="@style/tag"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/niceRed"
-    android:text="Tag" />
+    android:gravity="center_vertical">
+    <TextView
+        android:id="@+id/tvTag"
+        style="@style/tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/niceRed"
+        android:text="Tag" />
+    <EditText
+        android:id="@+id/etTag"
+        style="@style/tagEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/niceRed"
+        android:visibility="gone" />
+    <View
+        android:id="@+id/rectColor"
+        android:layout_marginStart="8dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@color/niceRed"/>
+    <Button
+        android:id="@+id/btnTrackTag"
+        android:background="@drawable/ic_tracked_24dp"
+        android:layout_marginStart="8dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"/>
+</LinearLayout>

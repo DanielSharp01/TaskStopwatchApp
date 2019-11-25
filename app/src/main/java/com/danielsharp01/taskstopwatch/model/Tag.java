@@ -1,15 +1,21 @@
 package com.danielsharp01.taskstopwatch.model;
 
-import android.content.Context;
 import android.content.res.Resources;
 
 import androidx.annotation.ColorInt;
 
+import com.danielsharp01.taskstopwatch.DI;
 import com.danielsharp01.taskstopwatch.R;
 
 public class Tag {
     private String name;
     private String color;
+    public static String[] allColors = new String[] { "red", "green", "blue", "black", "white", "yellow", "brown", "ocean", "orange", "pink", "purple" };
+
+    public Tag(String name) {
+        this.name = name;
+        this.color = allColors[DI.getRandom().nextInt(allColors.length)];
+    }
 
     public Tag(String name, String color) {
         this.name = name;
@@ -39,6 +45,8 @@ public class Tag {
                 return resources.getColor(R.color.niceBlue);
             case "black":
                 return resources.getColor(R.color.niceBlack);
+            case "gray":
+                return resources.getColor(R.color.niceGray);
             case "white":
                 return resources.getColor(R.color.niceWhite);
             case "yellow":

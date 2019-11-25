@@ -17,6 +17,8 @@ import com.danielsharp01.taskstopwatch.R;
 import com.danielsharp01.taskstopwatch.view.ViewPagerListener;
 import com.danielsharp01.taskstopwatch.view.adapter.DaySummaryAdapter;
 import com.danielsharp01.taskstopwatch.view.adapter.TagTimeAdapter;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
@@ -31,11 +33,18 @@ public class WeekPagerAdapter extends RecyclerView.Adapter<WeekPagerAdapter.Week
     private Context context;
     private ViewPagerListener viewPagerListener;
     private LocalDate now;
+    private BiMap<Integer, WeekViewHolder> viewHolders = HashBiMap.create();
 
     public WeekPagerAdapter(ViewPagerListener viewPagerListener, Context context) {
         this.viewPagerListener = viewPagerListener;
         this.context = context;
         now = LocalDate.now().with(DayOfWeek.MONDAY);
+    }
+
+    public void unbind() {
+        for (WeekViewHolder holder: viewHolders.values()) {
+            holder.unbind();
+        }
     }
 
     @Override
@@ -55,12 +64,20 @@ public class WeekPagerAdapter extends RecyclerView.Adapter<WeekPagerAdapter.Week
     @Override
     public void onBindViewHolder(@NonNull WeekViewHolder viewHolder, int i)
     {
+        viewHolders.put(i, viewHolder);
         viewHolder.bind(now.plusWeeks(i - Integer.MAX_VALUE / 2));
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull WeekViewHolder holder) {
+        super.onViewRecycled(holder);
+        holder.unbind();
+        viewHolders.inverse().remove(holder);
     }
 
     public class WeekViewHolder extends RecyclerView.ViewHolder
     {
-        private RecyclerView recyclerViewWeek;
+        private DaySummaryAdapter daySummaryAdapter;
         private TagTimeAdapter tagTimeAdapter;
 
         private TextView tvDate;
@@ -71,12 +88,14 @@ public class WeekPagerAdapter extends RecyclerView.Adapter<WeekPagerAdapter.Week
             super(itemView);
             RecyclerView recyclerViewTags = itemView.findViewById(R.id.recyclerViewTags);
             recyclerViewTags.setLayoutManager(new LinearLayoutManager(context));
-            tagTimeAdapter = new TagTimeAdapter(context, R.layout.tag_time_small);
+            tagTimeAdapter = new TagTimeAdapter(context, R.layout.tag_time_small, recyclerViewTags);
             recyclerViewTags.setAdapter(tagTimeAdapter);
             recyclerViewTags.setItemAnimator(new DefaultItemAnimator());
 
-            recyclerViewWeek = itemView.findViewById(R.id.recyclerViewWeek);
+            RecyclerView recyclerViewWeek = itemView.findViewById(R.id.recyclerViewWeek);
             recyclerViewWeek.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+            daySummaryAdapter = new DaySummaryAdapter(context);
+            recyclerViewWeek.setAdapter(daySummaryAdapter);
             recyclerViewWeek.setItemAnimator(new DefaultItemAnimator());
 
             tvDate = itemView.findViewById(R.id.tvDate);
@@ -89,13 +108,20 @@ public class WeekPagerAdapter extends RecyclerView.Adapter<WeekPagerAdapter.Week
 
         public void bind(LocalDate date)
         {
+            unbind();
             tvDate.setText(String.format("%s - %s",
                     date.format(DateTimeFormatter.ofPattern("MMMM d", Locale.ENGLISH)),
                     date.with(DayOfWeek.SUNDAY).format(DateTimeFormatter.ofPattern("MMMM d", Locale.ENGLISH))));
             tvYear.setText(String.valueOf(date.getYear()));
-            recyclerViewWeek.setAdapter(new DaySummaryAdapter(context, "week", date));
+
+            daySummaryAdapter.bind( "week", date);
             tagTimeAdapter.bindStorage(DI.getStorage().getAggregrateTaskStorageForWeek(date));
             DI.getTaskStopwatchService().queryTasks(date, "week");
+        }
+
+        public void unbind() {
+            daySummaryAdapter.unbind();
+            tagTimeAdapter.unbindStorage();
         }
     }
 }

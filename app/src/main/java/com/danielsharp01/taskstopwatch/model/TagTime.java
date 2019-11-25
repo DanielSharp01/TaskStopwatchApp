@@ -18,6 +18,10 @@ public class TagTime {
         this.duration = Duration.ofNanos(this.duration.toNanos() + duration.toNanos());
     }
 
+    public void subDuration(Duration duration) {
+        this.duration = Duration.ofNanos(this.duration.toNanos() - duration.toNanos());
+    }
+
     public Duration getActiveDuration() {
         return activeDuration;
     }
@@ -33,6 +37,10 @@ public class TagTime {
 
     public Tag getTag() {
         return tag;
+    }
+
+    public Duration getInactiveDuration() {
+        return duration;
     }
 
     public Duration getDuration() {
